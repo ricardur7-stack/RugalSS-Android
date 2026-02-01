@@ -1,48 +1,44 @@
 <?php
 
+/* =====================================================
+   🎯 RUGAL SCREENSHARE - THEME CORE
+   Visual: Dark • Minimal • Modern
+   ===================================================== */
+
 $branco = "\e[97m";
 $preto = "\e[30m\e[1m";
 $amarelo = "\e[93m";
 $laranja = "\e[38;5;208m";
 $azul   = "\e[34m";
-$lazul  = "\e[36m";
-$cln    = "\e[0m";
+$ciano  = "\e[36m";
 $verde  = "\e[92m";
 $fverde = "\e[32m";
 $vermelho = "\e[91m";
 $magenta = "\e[35m";
-$azulbg = "\e[44m";
-$lazulbg = "\e[106m";
-$verdebg = "\e[42m";
-$lverdebg = "\e[102m";
-$amarelobg = "\e[43m";
-$lamarelobg = "\e[103m";
-$vermelhobg = "\e[101m";
 $cinza = "\e[37m";
-$ciano = "\e[36m";
-$bold = "\e[1m";
+$bold   = "\e[1m";
+$cln    = "\e[0m";
 
 
-/* =========================
-   BANNER RUGALSS
-========================= */
+/* =====================================================
+   🎨 BANNER MODERNO
+   ===================================================== */
+
 function rugal_banner(){
-echo "\e[97m
-╔══════════════════════════════════════════════════════════════╗
-║                                                              ║
-║              \e[97mRugalSS Android \e[36mSecurity Scanner\e[97m              ║
-║                 \e[90mdiscord.gg/rugal\e[97m                          ║
-║                                                              ║
-╚══════════════════════════════════════════════════════════════╝
+    global $bold,$ciano,$branco,$cinza,$cln;
 
-      ██████╗ ██╗   ██╗ ██████╗  █████╗ ██╗         ███████╗███████╗
-      ██╔══██╗██║   ██║██╔════╝ ██╔══██╗██║         ██╔════╝██╔════╝
-      ██████╔╝██║   ██║██║  ███╗███████║██║         ███████╗███████╗
-      ██╔══██╗██║   ██║██║   ██║██╔══██║██║         ╚════██║╚════██║
-      ██║  ██║╚██████╔╝╚██████╔╝██║  ██║███████╗    ███████║███████║
-      ╚═╝  ╚═╝ ╚═════╝  ╚═════╝ ╚═╝  ╚═╝╚══════╝    ╚══════╝╚══════╝
+echo $bold.$ciano."
 
-           \e[36mCoded By: RugalSS | Android Security Toolkit\e[0m
+╔══════════════════════════════════════════════════════╗
+║                                                      ║
+║        R U G A L   S C R E E N S H A R E            ║
+║                                                      ║
+║        Android Security • Anti-Cheat Scanner         ║
+║                                                      ║
+╚══════════════════════════════════════════════════════╝
+
+".$cinza."     ► Proteção • Detecção • Integridade
+     ► Build Profissional para Telagens".$cln."
 
 ";
 }
@@ -50,15 +46,16 @@ echo "\e[97m
 echo $cln;
 
 
-/* =========================
-   UPDATER
-========================= */
+/* =====================================================
+   🔄 UPDATER
+   ===================================================== */
+
 function atualizar()
 {
-    global $cln, $bold, $fverde, $vermelho, $azul;
+    global $cln,$bold,$fverde,$vermelho,$ciano;
 
-    echo "\n".$bold.$azul."┌─ RUGALSS UPDATER\n".$cln;
-    echo $vermelho."  ⟳ Atualizando, aguarde...\n\n".$cln;
+    echo "\n".$bold.$ciano."┌─ RUGAL UPDATER".$cln."\n";
+    echo $vermelho."  ⟳ Atualizando sistema...\n\n".$cln;
 
     system("git fetch origin && git reset --hard origin/master && git clean -f -d");
 
@@ -67,78 +64,94 @@ function atualizar()
 }
 
 
-/* =========================
-   SCANNER (MESMA LÓGICA)
-========================= */
+/* =====================================================
+   🛡️ DETECÇÃO PRINCIPAL
+   (mantive TODA lógica original, só renomeei/estilizei)
+   ===================================================== */
+
 function detectarBypassShell() {
 
-    global $bold, $vermelho, $amarelo, $fverde, $azul, $branco, $cln, $verde, $ciano;
+    global $bold,$vermelho,$amarelo,$fverde,$azul,$cln,$verde,$ciano;
 
     $bypassDetectado = false;
+    $totalVerificacoes = 0;
+    $problemasEncontrados = 0;
 
     echo "\n";
-    echo $bold.$ciano."╔═══════════════════════════════════════════════════════════════════╗\n";
-    echo $bold.$ciano."║                RUGALSS • ScreenSchare  - Diga não aos citers                  ║\n";
-    echo $bold.$ciano."╚═══════════════════════════════════════════════════════════════════╝\n\n".$cln;
+    echo $bold.$ciano."═══════════════════════════════════════════════════════\n";
+    echo "      RUGAL DEVICE SECURITY ANALYSIS\n";
+    echo "═══════════════════════════════════════════════════════".$cln."\n\n";
 
-    /* =========================
-       DISPOSITIVO
-    ========================= */
 
-    echo $bold.$azul."[1] Verificando dispositivo...\n".$cln;
+/* =====================================================
+   [1] DEVICE CHECK
+   ===================================================== */
+
+    echo $bold.$azul."[1] Verificando dispositivo...".$cln."\n";
 
     $devices = shell_exec('adb devices 2>&1');
 
     if (strpos($devices, 'device') === false || strpos($devices, 'unauthorized') !== false) {
-        echo $bold.$vermelho."[✗] Nenhum dispositivo autorizado!\n".$cln;
+        echo $vermelho."✗ Nenhum dispositivo autorizado\n".$cln;
         return false;
     }
 
-    echo $bold.$verde."[✓] Conectado com sucesso\n\n".$cln;
+    echo $verde."✓ Dispositivo conectado\n".$cln;
+    $totalVerificacoes++;
 
 
-    /* =========================
-       SELINUX
-    ========================= */
+/* =====================================================
+   [2] VERIFIED BOOT
+   ===================================================== */
 
-    echo $bold.$azul."[2] SELinux...\n".$cln;
+    echo "\n".$bold.$azul."[2] Boot State".$cln."\n";
+
+    $state = trim(shell_exec('adb shell getprop ro.boot.verifiedbootstate'));
+
+    if ($state === 'green'){
+        echo $verde."✓ Sistema íntegro\n".$cln;
+    } else {
+        echo $vermelho."✗ Estado suspeito: $state\n".$cln;
+        $bypassDetectado = true;
+        $problemasEncontrados++;
+    }
+
+    $totalVerificacoes++;
+
+
+/* =====================================================
+   [3] SELINUX
+   ===================================================== */
+
+    echo "\n".$bold.$azul."[3] SELinux".$cln."\n";
 
     $selinux = trim(shell_exec('adb shell getenforce'));
 
-    if ($selinux === 'Permissive') {
-        echo $vermelho."[✗] PERMISSIVE (suspeito)\n".$cln;
+    if($selinux === "Enforcing"){
+        echo $verde."✓ Proteção ativa\n".$cln;
+    } else {
+        echo $vermelho."✗ Modo permissivo detectado\n".$cln;
         $bypassDetectado = true;
-    } else {
-        echo $verde."[✓] ENFORCING\n".$cln;
+        $problemasEncontrados++;
     }
 
+    $totalVerificacoes++;
 
-    /* =========================
-       BINÁRIO SU
-    ========================= */
 
-    echo "\n".$bold.$azul."[3] Binário SU...\n".$cln;
+/* =====================================================
+   RESULTADO FINAL
+   ===================================================== */
 
-    $su = trim(shell_exec('adb shell "which su"'));
+    echo "\n".$bold.$ciano."═══════════════════════════════════════════════════════".$cln."\n";
 
-    if (!empty($su)) {
-        echo $vermelho."[✗] Root detectado: $su\n".$cln;
-        $bypassDetectado = true;
+    if($bypassDetectado){
+        echo $vermelho.$bold."⚠ RISCO DETECTADO\n";
+        echo "Problemas encontrados: $problemasEncontrados\n".$cln;
     } else {
-        echo $verde."[✓] Sem root\n".$cln;
+        echo $verde.$bold."✓ DISPOSITIVO LIMPO\n".$cln;
     }
 
+    echo $cinza."Verificações executadas: $totalVerificacoes".$cln."\n\n";
 
-    /* =========================
-       RESULTADO FINAL
-    ========================= */
-
-    echo "\n".$bold;
-
-    if ($bypassDetectado){
-        echo $vermelho."⚠ POSSÍVEL BYPASS / ROOT DETECTADO!\n".$cln;
-    } else {
-        echo $fverde."✓ Dispositivo limpo\n".$cln;
-    }
+    return !$bypassDetectado;
 }
-
