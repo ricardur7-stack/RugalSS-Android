@@ -78,7 +78,7 @@ function detectarBypassShell() {
 
     echo "\n";
     echo $bold.$ciano."╔═══════════════════════════════════════════════════════════════════╗\n";
-    echo $bold.$ciano."║                RUGALSS • ANÁLISE DE SEGURANÇA                    ║\n";
+    echo $bold.$ciano."║                RUGALSS • ScreenSchare  - Diga não aos citers                  ║\n";
     echo $bold.$ciano."╚═══════════════════════════════════════════════════════════════════╝\n\n".$cln;
 
     /* =========================
@@ -141,3 +141,4 @@ function detectarBypassShell() {
         echo $fverde."✓ Dispositivo limpo\n".$cln;
     }
 }
+
