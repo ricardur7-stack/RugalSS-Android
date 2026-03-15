@@ -1,51 +1,60 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>AURA IP CHECK</title>
 
 <style>
 
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, Helvetica, sans-serif;
+}
+
 body{
-background:#0b0000;
-font-family:Arial, sans-serif;
-color:white;
+height:100vh;
 display:flex;
 align-items:center;
 justify-content:center;
-height:100vh;
-margin:0;
+background:linear-gradient(135deg,#0a0000,#200000);
+color:white;
 }
 
 .container{
 text-align:center;
-background:#1a0000;
-padding:40px;
+background:#140000;
+padding:50px;
 border-radius:12px;
-box-shadow:0 0 30px red;
+box-shadow:0 0 40px rgba(255,0,0,0.6);
+width:350px;
 }
 
 h1{
-color:#ff1a1a;
-font-size:40px;
+color:#ff2b2b;
+font-size:32px;
 margin-bottom:10px;
 }
 
 .discord{
-color:#ff4d4d;
-margin-bottom:30px;
-font-size:18px;
+color:#ff6666;
+margin-bottom:25px;
+font-size:16px;
 }
 
 button{
 background:#ff0000;
 border:none;
-padding:15px 35px;
+padding:14px 30px;
+border-radius:6px;
 font-size:18px;
 color:white;
-border-radius:8px;
 cursor:pointer;
-transition:0.3s;
+transition:0.2s;
 }
 
 button:hover{
@@ -55,8 +64,8 @@ transform:scale(1.05);
 
 #ip{
 margin-top:25px;
-font-size:28px;
-color:#ff3333;
+font-size:22px;
+color:#ff4444;
 }
 
 </style>
@@ -67,13 +76,13 @@ color:#ff3333;
 
 <div class="container">
 
-<h1>AURA IP CHECK</h1>
+<h1>AURA IP</h1>
 
 <div class="discord">
 discord.gg/aurabypass
 </div>
 
-<button onclick="mostrarIP()">Ver meu IP</button>
+<button onclick="mostrarIP()">VER MEU IP</button>
 
 <div id="ip"></div>
 
@@ -84,70 +93,8 @@ discord.gg/aurabypass
 function mostrarIP(){
 
 fetch("https://api.ipify.org?format=json")
-.then(response => response.json())
-.then(data => {
-
-document.getElementById("ip").innerHTML =
-"Seu IPv4: <b>"+data.ip+"</b>";
-
-});
-
-}
-
-</script>
-
-</body>
-</html>    if ($selinux === 'Permissive') {
-        echo $bold . $vermelho . "  ✗ SELinux: PERMISSIVE - Modo permissivo detectado (comum em dispositivos rooteados)\n" . $cln;
-        $bypassDetectado = true;
-        $problemasEncontrados++;
-    } elseif ($selinux === 'Enforcing') {
-        echo $bold . $verde . "  ✓ SELinux: ENFORCING - Modo de segurança ativo\n" . $cln;
-    } else {
-        echo $bold . $amarelo . "  ⚠ SELinux: $selinux (Status desconhecido)\n" . $cln;
-    }
-    $totalVerificacoes++;
-
-
-    echo "\n" . $bold . $azul . "  ► [4] VERIFICANDO PROPRIEDADES DO SISTEMA\n";
-    echo $bold . $azul . "  -----------------------------------------\n" . $cln;
-    
-    $propriedadesSuspeitas = [
-        'ro.debuggable' => ['valor' => '1', 'descricao' => 'Modo debug ativado'],
-        'ro.secure' => ['valor' => '0', 'descricao' => 'Segurança desativada'],
-        'service.adb.root' => ['valor' => '1', 'descricao' => 'ADB root ativo'],
-        'ro.build.selinux' => ['valor' => '0', 'descricao' => 'SELinux desabilitado'],
-        'ro.boot.flash.locked' => ['valor' => '0', 'descricao' => 'Flash desbloqueado'],
-        'ro.boot.veritymode' => ['valor' => 'disabled', 'descricao' => 'dm-verity desabilitado'],
-        'sys.oem_unlock_allowed' => ['valor' => '1', 'descricao' => 'OEM unlock permitido'],
-        'persist.sys.usb.config' => ['valor' => 'adb', 'descricao' => 'ADB persistente ativo'],
-        'ro.kernel.qemu' => ['valor' => '1', 'descricao' => 'Emulador detectado'],
-    ];
-
-    foreach ($propriedadesSuspeitas as $prop => $info) {
-        $valor = trim(shell_exec("adb shell getprop $prop 2>/dev/null"));
-        if ($valor === $info['valor']) {
-            echo $bold . $vermelho . "  ✗ Propriedade suspeita: $prop = $valor ({$info['descricao']})\n" . $cln;
-            $bypassDetectado = true;
-            $problemasEncontrados++;
-        }
-        $totalVerificacoes++;
-    }
-    
-    echo $bold . $verde . "  ✓ Verificação de propriedades concluída\n" . $cln;
-
-
-    echo "\n" . $bold . $azul . "  ► [5] VERIFICANDO BINÁRIOS SU (SUPERUSUÁRIO)\n";
-    echo $bold . $azul . "  --------------------------------------------\n" . $cln;
-    
-    $binariosSU = [
-        '/system/bin/su',
-        '/system/xbin/su',
-        '/sbin/su',
-        '/system/su',
-        '/system/bin/.ext/.su',
-        '/data/local/su',
-        '/data/local/bin/su',
+.then(res => res.json())
+.then(data =>        '/data/local/bin/su',
         '/data/local/xbin/su',
         '/su/bin/su',
         '/system/sbin/su',
