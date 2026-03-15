@@ -4,7 +4,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>AURA IP CHECK</title>
 
 <style>
@@ -21,37 +20,38 @@ height:100vh;
 display:flex;
 align-items:center;
 justify-content:center;
-background:linear-gradient(135deg,#0a0000,#200000);
+background:linear-gradient(140deg,#0b0000,#1a0000,#300000);
 color:white;
 }
 
 .container{
-text-align:center;
 background:#140000;
-padding:50px;
+padding:45px;
 border-radius:12px;
-box-shadow:0 0 40px rgba(255,0,0,0.6);
-width:350px;
+text-align:center;
+box-shadow:0 0 35px rgba(255,0,0,0.6);
+width:340px;
 }
 
 h1{
 color:#ff2b2b;
+margin-bottom:8px;
 font-size:32px;
-margin-bottom:10px;
 }
 
 .discord{
 color:#ff6666;
 margin-bottom:25px;
-font-size:16px;
+font-size:15px;
 }
 
 button{
 background:#ff0000;
 border:none;
-padding:14px 30px;
+padding:12px 22px;
+margin:6px;
 border-radius:6px;
-font-size:18px;
+font-size:16px;
 color:white;
 cursor:pointer;
 transition:0.2s;
@@ -62,82 +62,22 @@ background:#cc0000;
 transform:scale(1.05);
 }
 
-#ip{
-margin-top:25px;
-font-size:22px;
-color:#ff4444;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<div class="container">
-
-<h1>AURA IP</h1>
-
-<div class="discord">
-discord.gg/aurabypass
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>AURA IP CHECK</title>
-
-<style>
-
-body{
-background:#0d0000;
-color:white;
-font-family:Arial;
-display:flex;
-align-items:center;
-justify-content:center;
-height:100vh;
-margin:0;
-}
-
-.container{
-background:#1a0000;
-padding:40px;
-border-radius:10px;
-box-shadow:0 0 30px red;
-text-align:center;
-width:320px;
-}
-
-h1{
-color:#ff2b2b;
-margin-bottom:10px;
-}
-
-.discord{
-color:#ff5555;
-margin-bottom:25px;
-}
-
-button{
-background:#ff0000;
-border:none;
-padding:12px 25px;
-color:white;
-font-size:18px;
+#ipBox{
+margin-top:20px;
+background:#0c0000;
+padding:12px;
 border-radius:6px;
-cursor:pointer;
-}
-
-button:hover{
-background:#cc0000;
-}
-
-#ip{
-margin-top:25px;
-font-size:22px;
+font-size:20px;
 color:#ff4444;
+word-break:break-all;
+}
+
+.copyBtn{
+background:#990000;
+}
+
+.copyBtn:hover{
+background:#770000;
 }
 
 </style>
@@ -152,33 +92,47 @@ color:#ff4444;
 <div class="discord">discord.gg/aurabypass</div>
 
 <button onclick="mostrarIP()">VER MEU IP</button>
+<button class="copyBtn" onclick="copiarIP()">COPIAR IP</button>
 
-<div id="ip"></div>
+<div id="ipBox">Clique em "VER MEU IP"</div>
 
 </div>
 
 <script>
 
+let ipAtual = "";
+
 function mostrarIP(){
 
-document.getElementById("ip").innerText = "Carregando...";
+document.getElementById("ipBox").innerText = "Carregando...";
 
-fetch("https://api.ipify.org?format=text")
-.then(response => response.text())
-.then(ip => {
+fetch("https://api.ipify.org?format=json")
+.then(res => res.json())
+.then(data => {
 
-document.getElementById("ip").innerHTML = "Seu IPv4: <b>"+ip+"</b>";
+ipAtual = data.ip;
 
-})
-.catch(() => {
-
-document.getElementById("ip").innerText = "Erro ao obter IP";
+document.getElementById("ipBox").innerText = data.ip;
 
 });
+
+}
+
+function copiarIP(){
+
+if(ipAtual === ""){
+alert("Primeiro obtenha o IP");
+return;
+}
+
+navigator.clipboard.writeText(ipAtual);
+
+alert("IP copiado!");
 
 }
 
 </script>
 
 </body>
+
 </html>
