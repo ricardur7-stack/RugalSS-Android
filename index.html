@@ -1,113 +1,103 @@
-<?php
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>AURA IP CHECK</title>
 
-$branco = "\e[97m";
-$preto = "\e[30m\e[1m";
-$amarelo = "\e[93m";
-$laranja = "\e[38;5;208m";
-$azul   = "\e[34m";
-$lazul  = "\e[36m";
-$cln    = "\e[0m";
-$verde  = "\e[92m";
-$fverde = "\e[32m";
-$vermelho    = "\e[91m";
-$magenta = "\e[35m";
-$azulbg = "\e[44m";
-$lazulbg = "\e[106m";
-$verdebg = "\e[42m";
-$lverdebg = "\e[102m";
-$amarelobg = "\e[43m";
-$lamarelobg = "\e[103m";
-$vermelhobg = "\e[101m";
-$cinza = "\e[37m";
-$ciano = "\e[36m";
-$bold   = "\e[1m";
-function keller_banner(){
-  echo "\e[97m
-  \e[97mKellerSS Android \e[36mFucking Cheaters\e[97m
-  \e[90mdiscord.gg/allianceoficial\e[97m
+<style>
 
-  )       (     (          (     
-  ( /(       )\ )  )\ )       )\ )  
-  )\()) (   (()/( (()/(  (   (()/(  
-  |((_)\  )\   /(_)) /(_)) )\   /(_)) 
-  |_ ((_)((_) (_))  (_))  ((_) (_))   
-  | |/ / | __|| |   | |   | __|| _ \  
-  ' <  | _| | |__ | |__ | _| |   /  
-  _|\_\ |___||____||____||___||_|_\  
-
-  \e[36mCoded By: KellerSS | Credits: Sheik\e[0m
-  \n";
+body{
+background:#0b0000;
+font-family:Arial, sans-serif;
+color:white;
+display:flex;
+align-items:center;
+justify-content:center;
+height:100vh;
+margin:0;
 }
 
-
-echo $cln;
-
-function atualizar()
-{
-    global $cln, $bold, $fverde, $vermelho, $azul;
-    echo "\n" . $bold . $azul . "  ┌─ KELLERSS UPDATER\n" . $cln;
-    echo $vermelho . "  ⟳ Atualizando, aguarde...\n\n" . $cln;
-    system("git fetch origin && git reset --hard origin/master && git clean -f -d");
-    echo $bold . $fverde . "  ✓ Atualização concluída! Reinicie o scanner\n" . $cln;
-    exit;
+.container{
+text-align:center;
+background:#1a0000;
+padding:40px;
+border-radius:12px;
+box-shadow:0 0 30px red;
 }
 
-function detectarBypassShell() {
-    global $bold, $vermelho, $amarelo, $fverde, $azul, $branco, $cln, $verde, $ciano;
-    
-    $bypassDetectado = false;
-    $totalVerificacoes = 0;
-    $problemasEncontrados = 0;
-    
-    echo "\n";
-    echo $bold . $ciano . "  ANÁLISE COMPLETA DE SEGURANÇA DO DISPOSITIVO\n";
-    echo $bold . $ciano . "  ============================================\n\n" . $cln;
+h1{
+color:#ff1a1a;
+font-size:40px;
+margin-bottom:10px;
+}
 
-    echo $bold . $azul . "  ► [1] VERIFICANDO DISPOSITIVO CONECTADO\n";
-    echo $bold . $azul . "  ---------------------------------------\n" . $cln;
-    
-    $devices = shell_exec('adb devices 2>&1');
-    if (strpos($devices, 'device') === false || strpos($devices, 'unauthorized') !== false) {
-        echo $bold . $vermelho . "  [✗] Nenhum dispositivo detectado ou sem autorização!\n" . $cln;
-        return false;
-    }
-    
-    $check = shell_exec('adb shell "ls /sdcard 2>&1"');
-    if (strpos($check, 'Permission denied') !== false) {
-        echo $bold . $vermelho . "  [✗] ADB sem permissões suficientes!\n" . $cln;
-        return false;
-    }
-    
-    echo $bold . $verde . "  ✓ Dispositivo conectado com permissões adequadas\n\n" . $cln;
+.discord{
+color:#ff4d4d;
+margin-bottom:30px;
+font-size:18px;
+}
 
+button{
+background:#ff0000;
+border:none;
+padding:15px 35px;
+font-size:18px;
+color:white;
+border-radius:8px;
+cursor:pointer;
+transition:0.3s;
+}
 
-    echo $bold . $azul . "  ► [2] VERIFICANDO ESTADO DE BOOT VERIFICADO\n";
-    echo $bold . $azul . "  -------------------------------------------\n" . $cln;
-    
-    $verifiedBootState = trim(shell_exec('adb shell getprop ro.boot.verifiedbootstate 2>/dev/null'));
-    
-    if ($verifiedBootState === 'yellow') {
-        echo $bold . $amarelo . "  ⚠ Boot State: YELLOW - Suspeita de modificação no sistema\n" . $cln;
-        $bypassDetectado = true;
-        $problemasEncontrados++;
-    } elseif ($verifiedBootState === 'orange') {
-        echo $bold . $vermelho . "  ✗ Boot State: ORANGE - Bootloader desbloqueado detectado\n" . $cln;
-        $bypassDetectado = true;
-        $problemasEncontrados++;
-    } elseif ($verifiedBootState === 'green') {
-        echo $bold . $verde . "  ✓ Boot State: GREEN - Sistema verificado\n" . $cln;
-    } else {
-        echo $bold . $amarelo . "  ⚠ Boot State: $verifiedBootState (Desconhecido)\n" . $cln;
-    }
-    $totalVerificacoes++;
+button:hover{
+background:#cc0000;
+transform:scale(1.05);
+}
 
+#ip{
+margin-top:25px;
+font-size:28px;
+color:#ff3333;
+}
 
-    echo "\n" . $bold . $azul . "  ► [3] VERIFICANDO STATUS DO SELINUX\n";
-    echo $bold . $azul . "  -----------------------------------\n" . $cln;
-    
-    $selinux = trim(shell_exec('adb shell getenforce 2>/dev/null'));
-    
-    if ($selinux === 'Permissive') {
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>AURA IP CHECK</h1>
+
+<div class="discord">
+discord.gg/aurabypass
+</div>
+
+<button onclick="mostrarIP()">Ver meu IP</button>
+
+<div id="ip"></div>
+
+</div>
+
+<script>
+
+function mostrarIP(){
+
+fetch("https://api.ipify.org?format=json")
+.then(response => response.json())
+.then(data => {
+
+document.getElementById("ip").innerHTML =
+"Seu IPv4: <b>"+data.ip+"</b>";
+
+});
+
+}
+
+</script>
+
+</body>
+</html>    if ($selinux === 'Permissive') {
         echo $bold . $vermelho . "  ✗ SELinux: PERMISSIVE - Modo permissivo detectado (comum em dispositivos rooteados)\n" . $cln;
         $bypassDetectado = true;
         $problemasEncontrados++;
