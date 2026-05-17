@@ -1,140 +1,352 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AURA IP CHECK</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Headtrick IP Grabber</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-<style>
+        body {
+            background: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Monaco', 'Courier New', monospace;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, Helvetica, sans-serif;
-}
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
 
-body{
-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-background:linear-gradient(140deg,#0b0000,#1a0000,#300000);
-color:white;
-}
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+            padding: 20px;
+        }
 
-.container{
-background:#140000;
-padding:45px;
-border-radius:12px;
-text-align:center;
-box-shadow:0 0 35px rgba(255,0,0,0.6);
-width:340px;
-}
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-h1{
-color:#ff2b2b;
-margin-bottom:8px;
-font-size:32px;
-}
+        .discord-link {
+            font-size: 13px;
+            color: #666666;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 32px;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+        }
 
-.discord{
-color:#ff6666;
-margin-bottom:25px;
-font-size:15px;
-}
+        .discord-link a {
+            color: #ef4444;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
 
-button{
-background:#ff0000;
-border:none;
-padding:12px 22px;
-margin:6px;
-border-radius:6px;
-font-size:16px;
-color:white;
-cursor:pointer;
-transition:0.2s;
-}
+        .discord-link a:hover {
+            color: #ff6b6b;
+            text-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+        }
 
-button:hover{
-background:#cc0000;
-transform:scale(1.05);
-}
+        .label {
+            font-size: 12px;
+            color: #666666;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+        }
 
-#ipBox{
-margin-top:20px;
-background:#0c0000;
-padding:12px;
-border-radius:6px;
-font-size:20px;
-color:#ff4444;
-word-break:break-all;
-}
+        .ip-display {
+            font-size: 48px;
+            font-weight: 300;
+            letter-spacing: 2px;
+            color: #ffffff;
+            margin-bottom: 32px;
+            min-height: 60px;
+            transition: all 0.3s ease;
+            font-family: 'Monaco', 'Courier New', monospace;
+        }
 
-.copyBtn{
-background:#990000;
-}
+        .ip-display.loading {
+            color: #666666;
+            font-size: 16px;
+        }
 
-.copyBtn:hover{
-background:#770000;
-}
+        .ip-display.proxy {
+            color: #ef4444;
+            text-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+        }
 
-</style>
+        .proxy-warning {
+            display: none;
+            font-size: 13px;
+            color: #ef4444;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            animation: fadeIn 0.5s ease;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+        }
+
+        .copy-btn {
+            position: relative;
+            background: transparent;
+            border: 2px dashed rgba(239, 68, 68, 0.4);
+            color: #ef4444;
+            padding: 12px 40px;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .copy-btn:hover {
+            border-color: rgba(239, 68, 68, 0.7);
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.2), 0 0 30px rgba(239, 68, 68, 0.1);
+            color: #ff6b6b;
+        }
+
+        .copy-btn:active {
+            transform: scale(0.97);
+        }
+
+        .copy-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .copy-btn.copied {
+            border-color: rgba(239, 68, 68, 0.8);
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.3), 0 0 40px rgba(239, 68, 68, 0.1);
+            color: #ff6b6b;
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .copy-btn.copied::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            animation: ripple 0.6s ease-out;
+        }
+
+        @keyframes ripple {
+            to {
+                width: 300px;
+                height: 300px;
+                opacity: 0;
+            }
+        }
+
+        .icon {
+            width: 16px;
+            height: 16px;
+            display: inline-block;
+        }
+    </style>
 </head>
-
 <body>
+    <canvas id="particles-canvas"></canvas>
 
-<div class="container">
+    <div class="container">
+        <div class="discord-link">
+            <a href="https://discord.gg/headtrick" target="_blank" rel="noopener noreferrer">
+                discord.gg/headtrick
+            </a>
+        </div>
 
-<h1>AURA IP</h1>
+        <div class="label">Seu IPv4</div>
 
-<a href="https://discord.gg/aurabypass" class="discord" target="_blank">
-    discord.gg/aurabypass
-</a>
+        <div class="ip-display loading" id="ip">carregando...</div>
 
-<button onclick="mostrarIP()">VER MEU IP</button>
-<button class="copyBtn" onclick="copiarIP()">COPIAR IP</button>
+        <div class="proxy-warning" id="proxyWarning">
+            ⚠ Desligue a proxy antes de verificar seu IP
+        </div>
 
-<div id="ipBox">Clique em "VER MEU IP"</div>
+        <button class="copy-btn" id="copyBtn" onclick="copyIP()">
+            <span class="icon">📋</span>
+            <span id="btnText">Copiar</span>
+        </button>
+    </div>
 
-</div>
+    <script>
+        // Configuração de partículas
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
 
-<script>
+        const particles = [];
+        const particleCount = 60;
+        const VPS_IP = '177.7.56.197';
 
-let ipAtual = "";
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.8;
+                this.speedY = (Math.random() - 0.5) * 0.8;
+                this.opacity = Math.random() * 0.15 + 0.05;
+            }
 
-function mostrarIP(){
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
 
-document.getElementById("ipBox").innerText = "Carregando...";
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
 
-fetch("https://api.ipify.org?format=json")
-.then(res => res.json())
-.then(data => {
+            draw() {
+                ctx.fillStyle = `rgba(239, 68, 68, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
 
-ipAtual = data.ip;
+        // Inicializar partículas
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
 
-document.getElementById("ipBox").innerText = data.ip;
+        function drawLines() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
 
-});
+                    if (distance < 150) {
+                        ctx.strokeStyle = `rgba(239, 68, 68, ${0.06 * (1 - distance / 150)})`;
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
 
-}
+        function animate() {
+            ctx.fillStyle = '#0a0a0a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-function copiarIP(){
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
 
-if(ipAtual === ""){
-alert("Primeiro obtenha o IP");
-return;
-}
+            drawLines();
+            requestAnimationFrame(animate);
+        }
 
-navigator.clipboard.writeText(ipAtual);
+        animate();
 
-alert("IP copiado!");
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
 
-}
+        // Obter IP
+        const ipElement = document.getElementById('ip');
+        const warningElement = document.getElementById('proxyWarning');
 
-</script>
+        fetch('https://api.ipify.org?format=json')
+            .then(r => r.json())
+            .then(data => {
+                ipElement.textContent = data.ip;
+                ipElement.classList.remove('loading');
 
+                if (data.ip === VPS_IP) {
+                    warningElement.style.display = 'block';
+                    ipElement.classList.add('proxy');
+                }
+            })
+            .catch(() => {
+                ipElement.textContent = 'Erro ao obter IP';
+                ipElement.classList.remove('loading');
+            });
+
+        // Copiar IP
+        function copyIP() {
+            const ip = document.getElementById('ip').textContent;
+            const btn = document.getElementById('copyBtn');
+            const btnText = document.getElementById('btnText');
+
+            if (ip === 'carregando...' || ip === 'Erro ao obter IP') return;
+
+            function onCopied() {
+                btnText.textContent = 'Copiado';
+                btn.classList.add('copied');
+                setTimeout(() => {
+                    btnText.textContent = 'Copiar';
+                    btn.classList.remove('copied');
+                }, 2000);
+            }
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(ip).then(onCopied).catch(() => fallbackCopy(ip, onCopied));
+            } else {
+                fallbackCopy(ip, onCopied);
+            }
+        }
+
+        function fallbackCopy(text, callback) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                callback();
+            } catch (err) {
+                console.error('Erro ao copiar:', err);
+            }
+            document.body.removeChild(ta);
+        }
+    </script>
 </body>
-
 </html>
